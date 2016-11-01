@@ -7,12 +7,14 @@ var SimpleDynamicComponent = React.createClass({
         // Return div with two paragraphs
         return (
             <div>
-                <p>{this.props.name}</p>
+                <p>Hello my name is {this.props.name}</p>
+                <p>I am interested in {this.props.interest}</p>
             </div>
+
         )
     }
 });
 
 // Render your component in the `main` section
 ReactDOM.render(
-    <SimpleDynamicComponent name='hello'/>, document.querySelector('body');)
+    <SimpleDynamicComponent name='"hello"' interest='"stuff"'/>, document.querySelector('main'));
