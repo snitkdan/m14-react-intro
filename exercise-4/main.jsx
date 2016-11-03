@@ -21,7 +21,7 @@ var employeeData = [
     }
 ];
 
-// Simple ListItem component for showing an <li>
+// Simple Employee component for showing an <li>
 var Employee = React.createClass({
     render: function() {
         return (
