@@ -1,51 +1,40 @@
 // Main.jsx file
 
-// Data to pass to our List elements
-var employeeData = [
-    {name:"Joan", title:"developer", salary:100000},
-    {name:"Enrique", title:"manager", salary:200000},
-    {name:"Shana", title:"developer", salary:105000},
-    {name:"Shana", title:"manager", salary:105000},
-];
+// Data to pass into our parent component
+var data = [
+  {text: 'BIZ'},
+  {text: 'BAZ'},
+  {text: 'BIF'},
+]
 
-// Simple ListItem component for showing an <li>
-var Employee = React.createClass({
-    render:function() {
-        return(<tr className={this.props.title}>
-            <td>{this.props.name}</td>
-            <td>{this.props.title}</td>
-            <td>{this.props.salary}</td>
-        </tr>)
-    }
+// Create an DropDownItem element to render a single item in the drop down
+var DDI = React.createClass({
+  render:function(){
+    var text = this.props.text;
+    var key = this.props.key;
+    var index = this.props.index;
+    return(
+        <li key={key}><a href="#!">{text}<span className="new badge">{index}</span></a></li>
+    )
+  }
 });
 
-// EmployeeTable
-var EmployeeTable = React.createClass({
-    render:function() {
-        return(
-            <div>
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>Name</th>
-                            <th>Title</th>
-                            <th>Salary</th>
-                        </tr>
-                        {this.props.data.map(function(d, i){
-                            return <Employee key={'employee-' + i}
-                                             name={d.name}
-                                             salary={d.salary}
-                                             title={d.title}
-                                />
-                        })}
-                    </tbody>
-                </table>
-            </div>
-        );
-    }
+// Create a DropDown element to render several DropDownItems
+var DD = React.createClass({
+  render:function(){
+    console.log(data);
+    var data = this.props.data;
+    console.log(data);
+    return(
+      <div>
+        <ul>
+          {data.map((item,index) => <DDI key={index} index={index + 1} text={item.text}/>)}
+        </ul>
+      </div>
+    )
+  }
 });
 
 // Render your component in the `main` section
-ReactDOM.render(<EmployeeTable data={employeeData}/>,
-    document.querySelector('main')
-);
+ReactDOM.render(<DD data={data}/>,
+  document.querySelector('main'));

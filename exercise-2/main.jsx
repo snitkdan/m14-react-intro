@@ -1,20 +1,14 @@
 // Main.jsx file
 
 // Create a simple component
-var SimpleDynamicComponent = React.createClass({
-    // In your render function...
-    render: function() {
-        // Return div with two paragraphs
-        return (
-            <div>
-                <p>Hello my name is {this.props.name}</p>
-                <p>I am interested in {this.props.interest}</p>
-            </div>
-
-        )
-    }
+var ChipOrButton = React.createClass({
+  render:function(){
+    var check = this.props.check;
+    return(
+      <div className={check}>{check}</div>
+    )
+  }
 });
 
 // Render your component in the `main` section
-ReactDOM.render(
-    <SimpleDynamicComponent name='"hello"' interest='"stuff"'/>, document.querySelector('main'));
+ReactDOM.render(<div><ChipOrButton check='chip'/><ChipOrButton check='btn'/></div>, document.querySelector('main'));
