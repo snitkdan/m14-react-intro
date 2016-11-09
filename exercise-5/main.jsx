@@ -35,14 +35,14 @@ var MovieControls = React.createClass({
 
 // MovieItem element for showing a movie card
 var MovieItem = React.createClass({
-    render: function() {
+    render:function() {
         // Return image card
         // Taken from: http://materializecss.com/cards.html
         return (
-            <div className="col s3 m6">
+            <div className="col s3">
                 <div className="card">
-                    <div className="car d-image">
-                        <img alt="set photo src" src={this.props.data.poster_path}/>
+                    <div className="card-image">
+                        <img alt="set photo src" src={imageUrl + this.props.data.poster_path + '?' + apiKey}/>
                     </div>
                     <div className="card-content">
                         <p>{this.props.data.title}</p>
