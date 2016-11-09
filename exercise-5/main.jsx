@@ -42,10 +42,10 @@ var MovieItem = React.createClass({
             <div className="col s3 m6">
                 <div className="card">
                     <div className="car d-image">
-                        <img alt="set photo src" src={this.props.backdrop_path}/>
+                        <img alt="set photo src" src={this.props.data.poster_path}/>
                     </div>
                     <div className="card-content">
-                        <p>{this.props.title}</p>
+                        <p>{this.props.data.title}</p>
                     </div>
                 </div>
             </div>
@@ -57,7 +57,7 @@ var MovieItem = React.createClass({
 var MovieApp = React.createClass({
     // Set initlal state: empty array for movies, order:'popularity'
     getInitialState: function() {
-        return ({movies: null, order: 'popularity'});
+        return {movies:[], order:'popularity'};
     },
 
     // Function to get movies from the API
@@ -66,14 +66,12 @@ var MovieApp = React.createClass({
         // See: https://www.themoviedb.org/documentation/api/discover
         let url = baseUrl + apiKey + '&sort_by=popularity.desc'
         $.get(url).then(function(data) {
-          this.setState({movies: data.results});
+            this.setState({movies: data.results});
         }.bind(this)) // bind component to "this" to use inside callback
     },
 
     // Function to sort an array by an object key
     sortMovies: function(movies, order) {
-        console.log(movies);
-        console.log(order);
         return movies.sort(function(a, b) {
             return a[order] - b[order]
         })
@@ -81,28 +79,32 @@ var MovieApp = React.createClass({
 
     // Function to set the "order" of state
     setOrder: function(element) {
-        this.setState({order: element});
+        this.setState({order: element.target.id})
     },
 
     // When the component mounts, get the movies from the API
     componentDidMount: function() {
-        this.getMovies;
+        this.getMovies();
 
     },
 
     // Render function
-    render: function() {
+    render:function() {
         // Sort your movies
-        movies = this.sortMovies(this.state.movies, this.state.order);
+        let sortedMovies = this.sortMovies(this.state.movies, this.state.order)
 
-        // Return a MovieItem for each element in your sorted array, and a MovieControls element
-        return (
+        // Return a MovieItem for each element in your sorted array
+        return(
             <div className="container">
-                <MovieControls/> {movies.map((x, i) => <MovieItem key={i} backdrop_path={x['backdrop_path']} title={x['title']}/>)}
+                <MovieControls clickEvent={this.setOrder}/>
+                <div className="row">
+                    {sortedMovies.map(function(d, i){
+                        return <MovieItem key={'movie' + i} data={d} />
+                    })}
+                </div>
             </div>
         );
     }
 });
 
-ReactDOM.render(
-    <MovieApp/>, document.querySelector('main'));
+ReactDOM.render(<MovieApp/>, document.querySelector('main'));
