@@ -11,8 +11,8 @@ const imageUrl = 'https://image.tmdb.org/t/p/' + imageSize
 
 // Some controls for the movie list
 var MovieControls = React.createClass({
-    render:function() {
-        return(
+    render: function() {
+        return (
             <div>
                 <h5>Sort By:</h5>
                 <p>
@@ -20,11 +20,11 @@ var MovieControls = React.createClass({
                     <label htmlFor="popularity">Popularity</label>
                 </p>
                 <p>
-                    <input name="group1" type="radio" id="vote_count" />
+                    <input name="group1" type="radio" id="vote_count"/>
                     <label htmlFor="vote_count">Vote Count</label>
                 </p>
                 <p>
-                    <input name="group1" type="radio" id="vote_average"  />
+                    <input name="group1" type="radio" id="vote_average"/>
                     <label htmlFor="vote_average">Vote Average</label>
                 </p>
             </div>
@@ -35,20 +35,20 @@ var MovieControls = React.createClass({
 
 // MovieItem element for showing a movie card
 var MovieItem = React.createClass({
-    render:function() {
+    render: function() {
         // Return image card
         // Taken from: http://materializecss.com/cards.html
-        return(
-                <div className="col s3">
-                    <div className="card">
-                        <div className="card-image">
-                            <img alt="set photo src" src="" />
-                        </div>
-                        <div className="card-content">
-                            <p>PUT THE TITLE HERE</p>
-                        </div>
+        return (
+            <div className="col s3 m6">
+                <div className="card">
+                    <div className="car d-image">
+                        <img alt="set photo src" src={this.props.backdrop_path}/>
+                    </div>
+                    <div className="card-content">
+                        <p>{this.props.title}</p>
                     </div>
                 </div>
+            </div>
         )
     }
 });
@@ -56,52 +56,53 @@ var MovieItem = React.createClass({
 // Movie App
 var MovieApp = React.createClass({
     // Set initlal state: empty array for movies, order:'popularity'
-    getInitialState:function() {
-        return null;
+    getInitialState: function() {
+        return ({movies: null, order: 'popularity'});
     },
 
     // Function to get movies from the API
-    getMovies:function() {
-        // Searh most popular movies
+    getMovies: function() {
+        // Search most popular movies
         // See: https://www.themoviedb.org/documentation/api/discover
         let url = baseUrl + apiKey + '&sort_by=popularity.desc'
-        $.get(url).then(function(data){
-            this.setState({movies: data.results});
+        $.get(url).then(function(data) {
+          this.setState({movies: data.results});
         }.bind(this)) // bind component to "this" to use inside callback
     },
 
     // Function to sort an array by an object key
-    sortMovies:function(movies, order) {
-        return movies.sort(function(a,b){
+    sortMovies: function(movies, order) {
+        console.log(movies);
+        console.log(order);
+        return movies.sort(function(a, b) {
             return a[order] - b[order]
         })
     },
 
     // Function to set the "order" of state
-    setOrder:function(element) {
-
+    setOrder: function(element) {
+        this.setState({order: element});
     },
 
     // When the component mounts, get the movies from the API
-    componentDidMount:function() {
+    componentDidMount: function() {
+        this.getMovies;
 
     },
 
     // Render function
-    render:function() {
+    render: function() {
         // Sort your movies
-
+        movies = this.sortMovies(this.state.movies, this.state.order);
 
         // Return a MovieItem for each element in your sorted array, and a MovieControls element
-        return(
+        return (
             <div className="container">
+                <MovieControls/> {movies.map((x, i) => <MovieItem key={i} backdrop_path={x['backdrop_path']} title={x['title']}/>)}
             </div>
         );
     }
 });
 
-
-// Render your MovieApp component in the `main` section
-ReactDOM.render(<MovieApp />,
-    document.querySelector('main')
-);
+ReactDOM.render(
+    <MovieApp/>, document.querySelector('main'));
